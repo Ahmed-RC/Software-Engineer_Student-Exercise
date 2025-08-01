@@ -9,6 +9,7 @@ import java.util.Set;
  * @author KNIME GmbH
  */
 public class Statistics {
+	private static final Statistics staticsInstance = new Statistics();
 
 	private final Set<String> linesRead = new HashSet<>();
 
@@ -47,7 +48,6 @@ public class Statistics {
 	 * @return the shared {@link Statistics} instance to use.
 	 */
 	public static Statistics getInstance() {
-		// FIXME: needs to be implemented
-		return null;
+		return staticsInstance;
 	}
 }
