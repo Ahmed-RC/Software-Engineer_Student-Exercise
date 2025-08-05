@@ -73,24 +73,3 @@ JUnit 4 tests are included under the `test/` directory. To run:
 ```bash
 javac -cp .;lib/junit-4.13.2.jar;lib/hamcrest-core-1.3.jar -d bin test/org/Ahmed/test/*.java
 java -cp .;bin;lib/junit-4.13.2.jar;lib/hamcrest-core-1.3.jar org.junit.runner.JUnitCore org.Ahmed.test.LineProcessorTest
-```
-
----
-
-## Project Structure
-
-```
-├── src/
-│   └── org/Ahmed/
-│       ├── Main.java
-│       ├── ArguementReader.java
-│       ├── InputValidator.java
-│       ├── ThreadManager.java
-│       ├── FileChunker.java
-│       └── LineProcessor.java
-├── test/
-│   └── org/Ahmed/test/
-├── lib/
-│   ├── junit-4.13.2.jar
-│   └── hamcrest-core-1.3.jar
-└── README.md
