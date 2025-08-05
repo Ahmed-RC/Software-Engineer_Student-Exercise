@@ -4,15 +4,14 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * Utility class for validating command-line input parameters.
+ */
 public class InputValidator {
-
     
-		private static final List<String> validinputTypes = Arrays.asList("int", "string", "double");
-		private static final List<String> validOperations = Arrays.asList("neg", "reverse", "capitalize");
-
-    private InputValidator(){
-
-    }
+	private static final List<String> validinputTypes = Arrays.asList("int", "string", "double");
+	private static final List<String> validOperations = Arrays.asList("neg", "reverse", "capitalize");
 
     public static void validateType(String inputType) {
 		if(!validinputTypes.contains(inputType)) {
@@ -34,15 +33,15 @@ public class InputValidator {
 		}
 	}
 
-	public static File validateInpueFile(String inputRaw) {
-		if (inputRaw == null || inputRaw.isEmpty()) {
-			throw new IllegalArgumentException("Input file cannot be null or empty");
-		}
-		File inputFile = new File(inputRaw);
-		if (!inputFile.exists() || !inputFile.isFile()) {
-			throw new IllegalArgumentException("Input file does not exist or is not a file: " + inputRaw);
-		}
-		return inputFile;
-	}
+    public static void validateInputFile(String inputRaw) {
+        if (inputRaw == null || inputRaw.isEmpty()) {
+            throw new IllegalArgumentException("Input file cannot be null or empty.");
+        }
+
+        File inputFile = new File(inputRaw);
+        if (!inputFile.exists() || !inputFile.isFile()) {
+            throw new IllegalArgumentException("Input file does not exist or is not a file: " + inputRaw);
+        }
+    }
     
 }

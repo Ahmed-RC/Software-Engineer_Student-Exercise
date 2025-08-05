@@ -5,6 +5,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Parses and stores command-line arguments for input processing.
+ * 
+ * This class reads arguments such as input file, input type, operations to apply, thread count, and output file path.
+ * It provides getter methods to retrieve these arguments and performs validation using {@link InputValidator}.
+ * 
+ * Expected arguments:
+ * <ul>
+ *     <li>--input <filepath> ;</li>
+ *     <li>--inputtype <string|int|double></li>
+ *     <li>--operations [capitalize,reverse,....]</li>
+ *     <li>--threads int </li>
+ *     <li>--output filepath (optional)</li>
+ * </ul>
+ * 
+ * Example usage:
+ * {@code new ArguementReader(args)}
+ * 
+ *
+ */
+
 public class ArguementReader {
 
     	private String inputFileName = null;
@@ -12,6 +33,13 @@ public class ArguementReader {
         private List<String> operations = new ArrayList<>();
 		private String outputFileName = null;
 		private int threads = 0;
+
+        public ArguementReader(String[] args) {
+            readArguements(args);
+            validate();
+        }
+
+        public ArguementReader() {}
 
     public void readArguements(String[] args) {
 	
@@ -39,16 +67,14 @@ public class ArguementReader {
 	}
 
     public File getInputFile() {
-        return InputValidator.validateInpueFile(inputFileName);
+        return new File(inputFileName);
     }
 
     public String getInputType() {
-        InputValidator.validateType(inputType);
         return inputType;
     }
 
     public List<String> getOperations() {
-        InputValidator.validateOperations(this.operations);
         return operations;
     }
 
@@ -61,8 +87,14 @@ public class ArguementReader {
     }
 
     public int getThreads() {
-        InputValidator.validateThreads(threads);
         return threads;
+    }
+
+    public void validate(){
+        InputValidator.validateInputFile(inputFileName);
+        InputValidator.validateType(inputType);
+        InputValidator.validateThreads(threads);
+        InputValidator.validateOperations(this.operations);
     }
     
 }

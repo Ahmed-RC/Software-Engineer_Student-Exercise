@@ -1,73 +1,71 @@
 package org.Ahmed;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Responsible for processing a list of input lines according to the input type and the specified operations.
+ */
 public class LineProcessor {
 
-    private String stringOutput = "";
-    private int integerOutput = 0;  
-    private double doubleOutput = 0.0;
-    private final Statistics statistics = Statistics.getInstance();
-    
+    /**
+     * Processes a list of lines by applying operations based on the input type (int, double, string).
+     * Also updates shared statistics in a thread-safe manner (synchronized) meaning only one Thread updates the statistics.
+     *
+     * @param lines The list of lines to process
+     * @param args The argument reader containing input type and operations
+     * @return List of processed lines as strings
+     * @throws IOException if any processing error occurs
+     */
+    public static List<String> processLines(List<String> lines, ArguementReader args) throws IOException {
+        String inputType = args.getInputType();
+        List<String> operations = args.getOperations();
+        Statistics statistics = Statistics.getInstance();
 
+        List<String> result = new ArrayList<>();
 
-    public void processLines(List<String> chunk, ArguementReader arguements, FileWriter outputFile,int numberOfThread) throws IOException {
-        String inputType = arguements.getInputType();
-        List<String> operations = arguements.getOperations();
-        boolean createOutputFile = arguements.createOutputFile();
+        for (String line : lines) {
+            updateStatistics(line, statistics);
+            result.add(applyOperations(line, operations, inputType));
+        }
 
-			for (int i = 0; i < chunk.size(); i++) {
-				String line = chunk.get(i).trim();
+        return result;
+    }
 
-				synchronized (Statistics.getInstance()) {
-                     statistics.updateStatisticsWithLine(line);
-                }
+    /**
+     * Applies the specified operations to the input line based on the declared input type.
+     *
+     * @param line The input line
+     * @param operations List of operations to apply (neg, reverse, capitalize)
+     * @param type The declared input type (int, double, string)
+     * @return The transformed string after applying operations
+     */
+    private static String applyOperations(String line, List<String> operations, String type) {
+        switch (type) {
+            case "int":
+                int intValue = Integer.parseInt(line);
+                if (operations.contains("neg")) intValue = -intValue;
+                return String.valueOf(intValue);
 
-			if (inputType.equals("int")) {
+            case "double":
+                double doubleValue = Double.parseDouble(line);
+                if (operations.contains("neg")) doubleValue = -doubleValue;
+                return String.valueOf(doubleValue);
 
-				integerOutput= Integer.parseInt(line);
-				if(operations.contains("neg")){
-					integerOutput = -integerOutput;
-				}
+            case "string":
+                if (operations.contains("reverse")) line = new StringBuilder(line).reverse().toString();
+                if (operations.contains("capitalize")) line = line.toUpperCase();
+                return line;
 
-				if(createOutputFile){
-					synchronized (outputFile) {
-                    outputFile.write(Integer.toString(integerOutput) + System.lineSeparator());
-					}
-				}else{
-					System.out.println(integerOutput);
-				}
-			}else if(inputType.equals("double")){
-				doubleOutput = Double.parseDouble(line);
-					if(operations.contains("neg")){
-						doubleOutput = -doubleOutput;
-				}
-				if(createOutputFile){
-					synchronized (outputFile) {
-					outputFile.write(Double.toString(doubleOutput) + System.lineSeparator());
-					}
-				}else{
-					System.out.println(doubleOutput);
-				}
-			}else{
-				stringOutput = line;
-				if(operations.contains("reverse")){
-					stringOutput = new StringBuilder(stringOutput).reverse().toString();
-				}
-				if(operations.contains("capitalize")){
-					stringOutput=stringOutput.toUpperCase();
-				}
-				if(createOutputFile){
-					synchronized (outputFile) {
-					outputFile.write(stringOutput+ System.lineSeparator());
-					}
-				}else{
-					System.out.println(stringOutput+numberOfThread);
-				}
-			}
-		
-	}
-}
+            default:
+                throw new IllegalArgumentException("Unsupported input type: " + type);
+        }
+    }
+
+    private static void updateStatistics(String line, Statistics statistics) {
+        synchronized (statistics) {
+            statistics.updateStatisticsWithLine(line);
+        }
+    }
 }
