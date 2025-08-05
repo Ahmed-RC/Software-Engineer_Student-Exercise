@@ -1,6 +1,0 @@
-i thought about adding Log instead of System.err but not necessary 
-command line point input to pass parameters dynamically during execution allowing for dynamic input managementand enables different behaviours of the same program based on the provided arguements 
-so in short the advantages :
-1- Dynamic input make programs more versatile and adaptable to different scenarios. without changint the source code 
-2- Autmoation and scripting: command line arguments are often used in scripts and automation tasks, allowing users to run programs with specific parameters without manual intervention.
-3- Allow different configs and behavs based on user-specififed values 
