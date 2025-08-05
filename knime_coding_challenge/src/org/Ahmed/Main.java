@@ -26,7 +26,7 @@ public class Main {
 
 		List<List<String>> chunks = FileChunker.chunkFile(argumentReader.getInputFile().getPath(), argumentReader.getThreads());
 
-		safelyProcessChunks(chunks, argumentReader, writer);
+		processChunks(chunks, argumentReader, writer);
 
 		if(createOutputFile){
 			writeStatisticsSummary(writer);
@@ -51,7 +51,7 @@ public class Main {
 		writer.close();
 	}
 
-	private static void safelyProcessChunks(List<List<String>> chunks, ArguementReader argumentReader, FileWriter writer) {
+	private static void processChunks(List<List<String>> chunks, ArguementReader argumentReader, FileWriter writer) {
 		try {
 			ThreadManager.processChunks(chunks, argumentReader, writer);
 		} catch (Exception e) {
